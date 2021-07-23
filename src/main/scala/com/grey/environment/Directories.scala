@@ -9,22 +9,23 @@ import scala.util.control.Exception
 class Directories {
 
     // Reset
-    def directoryReset(directoryName: String): Try[Boolean] = {
+    def directoryReset(directoryName: String): Boolean = {
 
         // Delete
         val delete = directoryDelete(directoryName = directoryName)
 
         // Create
-        if (delete.isSuccess) {
+        if (delete) {
             directoryCreate(directoryName = directoryName)
         } else {
-            sys.error(delete.failed.get.getMessage)
+            // Superfluous because directoryDelete( ) will address all directoryDelete( ) errors
+            false
         }
 
     }
 
     // Create
-    def directoryCreate(directoryName: String): Try[Boolean] = {
+    def directoryCreate(directoryName: String): Boolean = {
 
         // Object
         val directoryObject = new File(directoryName)
@@ -42,13 +43,13 @@ class Directories {
         if (create.isFailure){
             sys.error(create.failed.get.getMessage)
         } else {
-            create
+            create.isSuccess
         }
 
     }
 
     // Delete
-    def directoryDelete(directoryName: String): Try[Unit] = {
+    def directoryDelete(directoryName: String): Boolean = {
 
         // Object
         val directoryObject = new File(directoryName)
@@ -64,7 +65,7 @@ class Directories {
         if (delete.isFailure){
             sys.error(delete.failed.get.getMessage)
         } else {
-            delete
+            delete.isSuccess
         }
 
     }
