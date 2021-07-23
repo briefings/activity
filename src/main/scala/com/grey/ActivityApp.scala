@@ -30,7 +30,7 @@ object ActivityApp {
 
         // Hence
         if (directoriesReset.forall(_ == true)) {
-
+            new DataSteps(spark = spark)
         } else {
             // Superfluous because directoriesReset( ) address all directoriesReset( ) errors
             sys.exit()
