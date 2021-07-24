@@ -25,8 +25,8 @@ object ActivityApp {
 
         // Prepare local directories
         val directories = new Directories()
-        val directoriesReset: ParSeq[Boolean] = List(localSettings.dataDirectory, localSettings.warehouseDirectory)
-            .par.map( directory => directories.directoryReset(directory) )
+        val directoriesReset: ParSeq[Boolean] = List(localSettings.archiveDirectory, localSettings.dataDirectory,
+            localSettings.warehouseDirectory).par.map( directory => directories.directoryReset(directory) )
 
         // Hence
         if (directoriesReset.forall(_ == true)) {
