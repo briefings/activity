@@ -1,26 +1,34 @@
 package com.grey.data
 
-import com.grey.net.IsExistURL
+import com.grey.net.IsURL
 
 import java.io.File
 import java.net.URL
+import java.nio.file.Paths
 import scala.language.postfixOps
 import scala.sys.process._
 import scala.util.Try
 import scala.util.control.Exception
 
-class DataUnload {
+/**
+ *
+ * @param directory: The file will be unloaded into <directory>
+ */
+class DataUnload(directory: String) {
 
     /**
      *
      * @param urlString: The URL of a file
-     * @param fileString: The unloaded file will be saved as <fileString>
-     * @return
+     * @return The URI of the unloaded file
      */
-    def dataUnload(urlString: String, fileString: String): Try[String] = {
+    def dataUnload(urlString: String): String = {
 
         // Valid URL?
-        val isExistURL: Try[Boolean] = new IsExistURL().isExistURL(urlString = urlString)
+        val isExistURL: Try[Boolean] = new IsURL().isURL(urlString = urlString)
+
+        // Name strings
+        val fileName: String = Paths.get(urlString).getFileName.toString
+        val fileString: String = Paths.get(directory, fileName).toString
 
         // Unload
         val unload: Try[String] = if (isExistURL.isSuccess) {
@@ -32,7 +40,11 @@ class DataUnload {
         }
 
         // Hence
-        unload
+        if (unload.isSuccess){
+            fileString
+        } else {
+           sys.error(unload.failed.get.getMessage)
+        }
 
     }
 
