@@ -27,7 +27,7 @@ class DataUnload(directory: String) {
         val isExistURL: Try[Boolean] = new IsURL().isURL(urlString = urlString)
 
         // Name strings
-        val fileName: String = Paths.get(urlString).getFileName.toString
+        val fileName: String = urlString.split("/").reverse.head
         val fileString: String = Paths.get(directory, fileName).toString
 
         // Unload
