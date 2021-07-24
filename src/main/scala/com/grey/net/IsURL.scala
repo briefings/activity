@@ -4,9 +4,9 @@ import java.net.{HttpURLConnection, URL}
 import scala.util.Try
 import scala.util.control.Exception
 
-class IsExistURL {
+class IsURL {
 
-    def isExistURL(urlString: String): Try[Boolean] = {
+    def isURL(urlString: String): Try[Boolean] = {
 
 
         // Do not follow re-directs
