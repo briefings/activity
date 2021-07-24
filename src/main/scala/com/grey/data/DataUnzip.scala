@@ -1,12 +1,12 @@
 package com.grey.data
 
 import java.io.{File, FileInputStream, FileOutputStream}
-import java.util.zip.ZipInputStream
-import scala.util.Try
-import scala.util.control.Exception
+import java.nio.file.Paths
+import java.util.zip.{ZipEntry, ZipInputStream}
 
 /**
  * De-archives '.zip' files
+ * https://www.baeldung.com/java-compress-and-uncompress
  *
  * @param directory: The directory wherein the archive extracts will be saved
  */
@@ -17,24 +17,30 @@ class DataUnzip(directory: String) {
      * @param archiveString: The name of a zip file; it must include the path to its location an its extension
      * @return Boolean -> Unzipped successfully?
      */
-    def dataUnzip(archiveString: String): Boolean = {
+    def dataUnzip(archiveString: String): Unit = {
 
         // Buffer
-        val buffer = new Array[Byte](2048)
+        val buffer: Array[Byte] = new Array[Byte](4096)
 
         // Create an archive input stream object
-        val zipInputStream =  new ZipInputStream(new FileInputStream(archiveString))
-        var zipEntry = zipInputStream.getNextEntry
+        val zipInputStream: ZipInputStream =  new ZipInputStream(new FileInputStream(archiveString))
+        var zipEntry: ZipEntry = zipInputStream.getNextEntry
 
         // Whilst a file exists in the archive object
-        val dearchive: Try[Unit] = Exception.allCatch.withTry(
+        while (zipEntry != null) {
 
-            while (zipEntry != null) {
-
-                // The next file in the archive
-                val fileName = zipEntry.getName
-                val fileObject = new File(directory + fileName)
-
+            // The next file or directory in the archive
+            val pathString = zipEntry.getName
+            
+            // Hence
+            if (zipEntry.isDirectory | zipEntry.toString.split("/").length == 1){
+                val fileObject = new File(Paths.get(directory, pathString).toString)
+                fileObject.mkdirs()
+            }
+            else {
+                
+                val fileObject = new File(Paths.get(directory, pathString + ".csv").toString)
+                
                 // For cases whereby the archive has a directory structure
                 if (!new File(fileObject.getParent).exists()) {
                     new File(fileObject.getParent).mkdirs()
@@ -46,20 +52,16 @@ class DataUnzip(directory: String) {
                     fileOutputStream.write(buffer, 0, zipInputStream.read(buffer))
                 }
                 fileOutputStream.close()
-                zipEntry = zipInputStream.getNextEntry
-
             }
 
-        )
+            // Next entry
+            zipEntry = zipInputStream.getNextEntry
+
+        }
+
+        // Close
         zipInputStream.closeEntry()
         zipInputStream.close()
-
-        // Status
-        if (dearchive.isSuccess){
-            dearchive.isSuccess
-        } else {
-            sys.error(dearchive.failed.get.getMessage)
-        }
 
     }
 
