@@ -11,8 +11,13 @@ import scala.util.control.Exception
 
 class DataUnload {
 
-
-    def dataUnload(urlString: String, unloadString: String): Try[String] = {
+    /**
+     *
+     * @param urlString: The URL of a file
+     * @param fileString: The unloaded file will be saved as <fileString>
+     * @return
+     */
+    def dataUnload(urlString: String, fileString: String): Try[String] = {
 
         // Valid URL?
         val isExistURL: Try[Boolean] = new IsExistURL().isExistURL(urlString = urlString)
@@ -20,7 +25,7 @@ class DataUnload {
         // Unload
         val unload: Try[String] = if (isExistURL.isSuccess) {
             Exception.allCatch.withTry(
-                new URL(urlString) #> new File(unloadString) !!
+                new URL(urlString) #> new File(fileString) !!
             )
         } else {
             sys.error(isExistURL.failed.get.getMessage)
