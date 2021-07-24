@@ -1,17 +1,17 @@
 package com.grey
 
-import com.grey.data.{DataUnload, DataUnzip}
 import com.grey.environment.LocalSettings
+import org.apache.commons.io.FileUtils
 import org.apache.spark.sql.SparkSession
 
-import scala.util.Try
-import scala.util.control.Exception
+import java.io.File
+import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
 class DataSteps(spark: SparkSession) {
 
     private val localSettings = new LocalSettings()
 
-    def dataSteps(urlString: String): Unit = {
+    def dataSteps(): Unit = {
 
         /**
          * Import implicits for
@@ -19,15 +19,13 @@ class DataSteps(spark: SparkSession) {
          *   implicit conversions, e.g., converting a RDD to a DataFrames.
          *   access to the "$" notation.
          */
-        import spark.implicits._
+        import  spark.implicits._
 
-        // Unload & Unzip
-        val archiveString = new DataUnload(directory = localSettings.archiveDirectory).dataUnload(urlString = urlString)
-        val deArchive: Try[Unit] = Exception.allCatch.withTry(
-            new DataUnzip(directory = localSettings.dataDirectory).dataUnzip (archiveString = archiveString)
-        )
+        // List of files
+        val dataObject: File = new File(localSettings.dataDirectory)
+        val dataFiles: List[File] = FileUtils.listFiles(dataObject, Array("csv"),true).asScala.toList
+        dataFiles.par.foreach(file => println(file.toString))
 
-        println(deArchive.isSuccess)
 
 
 
