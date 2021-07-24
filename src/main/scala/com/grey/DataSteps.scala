@@ -5,6 +5,7 @@ import com.grey.environment.LocalSettings
 import org.apache.spark.sql.SparkSession
 
 import scala.util.Try
+import scala.util.control.Exception
 
 class DataSteps(spark: SparkSession) {
 
@@ -21,11 +22,15 @@ class DataSteps(spark: SparkSession) {
         import spark.implicits._
 
         // Unload & Unzip
-        val unload = (arg: String) => new DataUnload(directory = localSettings.archiveDirectory).dataUnload(urlString = arg)
-        val unzip = (arg: String) => new DataUnzip(directory = localSettings.dataDirectory).dataUnzip(archiveString = arg)
-        
-        val next: String => Boolean = unload andThen unzip
-        println(next)
+        val archiveString = new DataUnload(directory = localSettings.archiveDirectory).dataUnload(urlString = urlString)
+        val deArchive: Try[Unit] = Exception.allCatch.withTry(
+            new DataUnzip(directory = localSettings.dataDirectory).dataUnzip (archiveString = archiveString)
+        )
+
+        println(deArchive.isSuccess)
+
+
+
 
     }
 
