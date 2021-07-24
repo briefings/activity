@@ -29,7 +29,7 @@ object ActivityApp {
         // Spark Session
         // Serializer: https://spark.apache.org/docs/2.4.8/tuning.html
         val spark = SparkSession.builder().appName("Activity")
-            .config("spark.serializer", "org.apache.spark.serializer.KyroSerializer")
+            .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
             .config("spark.sql.warehouse.dir", localSettings.warehouseDirectory)
             .getOrCreate()
 
