@@ -1,6 +1,6 @@
 package com.grey.data
 
-import com.grey.net.IsURL
+import com.grey.algorithms.IsURL
 
 import java.io.File
 import java.net.URL
