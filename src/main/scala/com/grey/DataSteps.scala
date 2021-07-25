@@ -3,16 +3,12 @@ package com.grey
 import com.grey.data.{GetData, GetSchema}
 import com.grey.environment.LocalSettings
 import org.apache.commons.io.FileUtils
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
-import org.apache.spark.sql.types.{DataType, StructType}
-import org.apache.spark.sql.functions.lit
+import org.apache.spark.sql.{Dataset, Row, SparkSession}
+import org.apache.spark.sql.types.StructType
 import org.apache.spark.storage.StorageLevel
 
 import java.io.File
-import java.nio.file.Paths
 import scala.collection.JavaConverters.collectionAsScalaIterableConverter
-import scala.collection.parallel.immutable.ParSeq
 import scala.util.Try
 import scala.util.control.Exception
 
