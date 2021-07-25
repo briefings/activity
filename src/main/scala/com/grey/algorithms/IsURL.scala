@@ -31,7 +31,7 @@ class IsURL {
         if (request.isSuccess) {
             request
         } else {
-            sys.error(s"Error: ($urlString)" + request.failed.get.getMessage)
+            sys.error(s"Error ($urlString): " + request.failed.get.getMessage)
         }
 
 
