@@ -5,10 +5,21 @@ import org.scalatest.funsuite.FixtureAnyFunSuite
 
 import scala.util.control.Exception
 
+/**
+ * Ref:
+ *      https://www.scalatest.org/user_guide/sharing_fixtures -> Overriding withFixture(OneArgTest)
+ *      https://www.artima.com/docs-scalatest-2.0.M5/org/scalatest/fixture/FunSuite.html
+ *      https://www.scalatest.org/at_a_glance/FunSuite
+ */
 class InspectArgumentsSuite extends FixtureAnyFunSuite{
 
     case class FixtureParam(faulty: String, real: String)
 
+    /**
+     *
+     * @param test: F
+     * @return
+     */
     override def withFixture(test: OneArgTest): Outcome = {
 
         // Variables
