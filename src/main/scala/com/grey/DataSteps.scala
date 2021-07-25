@@ -1,14 +1,18 @@
 package com.grey
 
+import com.grey.data.{GetData, GetSchema}
 import com.grey.environment.LocalSettings
 import org.apache.commons.io.FileUtils
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 import org.apache.spark.sql.types.{DataType, StructType}
+import org.apache.spark.sql.functions.lit
+import org.apache.spark.storage.StorageLevel
 
 import java.io.File
 import java.nio.file.Paths
 import scala.collection.JavaConverters.collectionAsScalaIterableConverter
+import scala.collection.parallel.immutable.ParSeq
 import scala.util.Try
 import scala.util.control.Exception
 
@@ -24,34 +28,26 @@ class DataSteps(spark: SparkSession) {
          *   implicit conversions, e.g., converting a RDD to a DataFrames.
          *   access to the "$" notation.
          */
-        import  spark.implicits._
+        // import  spark.implicits._
 
-        // Read-in the schema
-        val fieldProperties: Try[RDD[String]] = Exception.allCatch.withTry(
-            spark.sparkContext.textFile(Paths.get(localSettings.resourcesDirectory, "schemaOf.json").toString)
+        // Get the schema of the data set
+        val schema: Try[StructType] = new GetSchema(spark = spark).getSchema
+
+        // The list of files
+        val dataObject: File = new File(localSettings.dataDirectory)
+        val dataFiles: Try[List[File]] = Exception.allCatch.withTry(
+            FileUtils.listFiles(dataObject, Array("csv"),true).asScala.toList
         )
 
-        // Convert schema to StructType
-        val schema: Try[StructType] = if (fieldProperties.isSuccess){
-            Exception.allCatch.withTry(
-                DataType.fromJson(fieldProperties.get.collect.mkString("")).asInstanceOf[StructType]
-            )
-        } else {
-            sys.error(fieldProperties.failed.get.getMessage)
-        }
+        // The data
+        val data: Dataset[Row] = new GetData(spark = spark).getData(dataFiles = dataFiles.get, schema = schema.get)
+        data.persist(StorageLevel.MEMORY_ONLY)
 
-        // List of files
-        val dataObject: File = new File(localSettings.dataDirectory)
-        val dataFiles: List[File] = FileUtils.listFiles(dataObject, Array("csv"),true).asScala.toList
+        // Temporary view
+        data.createOrReplaceTempView("activity")
 
-        // Read
-        dataFiles.foreach{file =>
-            val readings = spark.read.format("csv")
-                .schema(schema.get)
-                .option("header", value = false)
-                .load(file.toString)
-            readings.show(5)
-        }
+        // Hence
+        data.show(5)
 
     }
 
