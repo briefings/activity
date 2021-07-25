@@ -1,0 +1,87 @@
+{
+  "type": "struct",
+  "fields": [
+    {
+      "name": "time",
+      "type": "double",
+      "nullable": false,
+      "metadata":
+      {
+        "comment": "Time.  In seconds."
+      }
+    },
+    {
+      "name": "front_axis_acc",
+      "type": "double",
+      "nullable": false,
+      "metadata":
+      {
+        "comment": "Acceleration reading in G for frontal axis"
+      }
+    },
+    {
+      "name": "vertical_axis_acc",
+      "type": "double",
+      "nullable": false,
+      "metadata":
+      {
+        "comment": "Acceleration reading in G for vertical axis"
+      }
+    },
+    {
+      "name": "lateral_axis_acc",
+      "type": "double",
+      "nullable": false,
+      "metadata":
+      {
+        "comment": "Acceleration reading in G for lateral axis"
+      }
+    },
+    {
+      "name": "id",
+      "type": "integer",
+      "nullable": false,
+      "metadata":
+      {
+        "comment": "ID of antenna reading sensor"
+      }
+    },
+    {
+      "name": "rssi",
+      "type": "double",
+      "nullable": false,
+      "metadata":
+      {
+        "comment": "Received signal strength indicator (RSSI)"
+      }
+    },
+    {
+      "name": "phase",
+      "type": "double",
+      "nullable": false,
+      "metadata":
+      {
+        "comment": "Phase"
+      }
+    },
+    {
+      "name": "frequency",
+      "type": "double",
+      "nullable": false,
+      "metadata":
+      {
+        "comment": "Frequency"
+      }
+    },
+    {
+      "name": "label",
+      "type": "integer",
+      "nullable": false,
+      "metadata":
+      {
+        "comment": "Label of activity, 1: sit on bed, 2: sit on chair, 3: lying, 4: ambulating"
+      }
+    }
+
+  ]
+}
