@@ -17,7 +17,8 @@ class InspectArgumentsSuite extends FixtureAnyFunSuite{
 
     /**
      *
-     * @param test: F
+     * @param test: In context, the withFixture(test: OneArgTest) method creates the fixture
+     *                        argument and passes onto the test function
      * @return
      */
     override def withFixture(test: OneArgTest): Outcome = {
