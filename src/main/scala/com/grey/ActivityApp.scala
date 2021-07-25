@@ -8,7 +8,7 @@ import scala.collection.parallel.immutable.ParSeq
 
 object ActivityApp {
 
-    private val localSettings = new LocalSettings()
+    private val localSettings: LocalSettings = new LocalSettings()
 
     def main(args: Array[String]): Unit = {
 
@@ -34,6 +34,7 @@ object ActivityApp {
         val spark = SparkSession.builder().appName("Activity")
             .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
             .config("spark.sql.warehouse.dir", localSettings.warehouseDirectory)
+            .config("spark.worker.cleanup.enabled", value = true)
             .getOrCreate()
 
         // Prepare local directories
