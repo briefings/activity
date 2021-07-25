@@ -1,4 +1,4 @@
-package com.grey.net
+package com.grey.algorithms
 
 import java.net.{HttpURLConnection, URL}
 import scala.util.Try
