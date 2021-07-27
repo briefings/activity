@@ -1,2 +1,9 @@
+# Independent Development Environment
+.idea
+
+# Extensions
 *.class
 *.log
+
+# Exclude
+target
