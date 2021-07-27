@@ -1,5 +1,6 @@
 package com.grey
 
+import com.grey.algorithms.PolarCoordinates
 import com.grey.data.{GetData, GetSchema}
 import com.grey.environment.LocalSettings
 import org.apache.commons.io.FileUtils
@@ -42,9 +43,11 @@ class DataSteps(spark: SparkSession) {
         // Temporary view
         data.createOrReplaceTempView("activity")
 
-        // Hence
-        data.show(5)
+        // Alg
+        new PolarCoordinates(spark = spark).polarCoordinates(data = data)
 
     }
 
 }
+
+case class Mixture(mixture: Set[String])
