@@ -37,6 +37,7 @@ class GetData(spark: SparkSession) {
         // Transform to DataSet
         val caseClassOf = CaseClassOf.caseClassOf(schema = instances.schema)
         instances.as(caseClassOf)
+
     }
 
 }
