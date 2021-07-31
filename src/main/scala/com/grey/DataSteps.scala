@@ -49,5 +49,3 @@ class DataSteps(spark: SparkSession) {
     }
 
 }
-
-case class Mixture(mixture: Set[String])

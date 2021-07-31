@@ -60,7 +60,7 @@ class PolarCoordinates(spark: SparkSession) {
  * @param subject: Subject
  * @param events: Events
  */
-case class Subject(setting: String, subject: String, events: List[T])
+case class Subject(setting: String, subject: String, events: List[Events])
 
 
 /**
@@ -69,4 +69,4 @@ case class Subject(setting: String, subject: String, events: List[T])
  * @param frequency: Frequency
  * @param phase: Phase
  */
-case class T(time: Double, frequency: Double, phase: Double)
+case class Events(time: Double, frequency: Double, phase: Double)
